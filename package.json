@@ -2,11 +2,13 @@
   "name": "projectry",
   "version": "1.0.0",
   "description": "programm that helps to develop the architecture of you project",
-  "main": "main.js",
+  "main": "dist/main.js",
   "scripts": {
+    "transpile": "tsc",
+    "watch": "ts-node-dev --respawn --poll ./src/main.ts",
     "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+    "build": "electron-packager . --out=build --overwrite"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/eonias189/projectry.git"
@@ -15,12 +17,13 @@
     "architecture"
   ],
   "author": "Serg Isaev",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/eonias189/projectry/issues"
   },
   "homepage": "https://github.com/eonias189/projectry#readme",
   "devDependencies": {
-    "electron": "^27.0.3"
+    "electron": "^27.0.3",
+    "typescript": "^5.2.2"
   }
 }
