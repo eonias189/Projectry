@@ -1,9 +1,8 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
-import { join, dirname } from 'node:path'
+import { app, BrowserWindow, ipcMain } from "electron";
+import { join, dirname } from "node:path";
 
-
-const rootDir = dirname(__dirname); // entry point is in <root>/dist
-const windowDir = join(rootDir, "window")
+const rootDir = dirname(__dirname); // entry point is in <root>/dist/
+const frontendDir = join(rootDir, "frontend");
 
 function createWindow(width: number, height: number): void {
     console.log(__dirname);
@@ -11,29 +10,28 @@ function createWindow(width: number, height: number): void {
         width: width,
         height: height,
         webPreferences: {
-            preload: join(__dirname, 'preload.js')
-        }
+            preload: join(__dirname, "preload.js"),
+        },
     });
-    win.loadFile(join(windowDir, 'index.html'));
+    win.loadFile(join(frontendDir, "index.html"));
 }
-
 
 const application = {
-    name: 'projectry',
-}
+    name: "_Projectry_",
+};
 
 app.whenReady().then(() => {
     createWindow(800, 600);
-    ipcMain.handle('app', () => application)
-    app.on('activate', () => {
+    ipcMain.handle("app", () => application);
+    app.on("activate", () => {
         if (BrowserWindow.getAllWindows().length === 0) {
             createWindow(800, 600);
         }
     });
-})
+});
 
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
+app.on("window-all-closed", () => {
+    if (process.platform !== "darwin") {
         app.quit();
     }
 });

@@ -5,7 +5,7 @@
   "main": "dist/main.js",
   "scripts": {
     "transpile": "tsc",
-    "start": "electron-forge start",
+    "start": "electron .",
     "package": "electron-forge package",
     "make": "electron-forge make"
   },
