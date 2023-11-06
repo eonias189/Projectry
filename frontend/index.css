@@ -29,10 +29,8 @@ body.dark h1 {
     color: #fff;
 }
 
-.theme-switcher {
-    display: inline-block;
-    width: 120px;
-    height: 50px;
+.btn {
+    padding: 10px;
     outline: none;
     cursor: pointer;
     border: 2px solid;
@@ -43,6 +41,12 @@ body.dark h1 {
     transition: color 0.5s ease;
 }
 
-body.dark .theme-switcher {
+body.dark .btn {
     color: #fff;
+}
+
+#app > div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }

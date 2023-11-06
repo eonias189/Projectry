@@ -1,5 +1,4 @@
 import { ipcRenderer, contextBridge } from "electron";
+import { api } from "./api";
 
-contextBridge.exposeInMainWorld("api", {
-    getApp: () => ipcRenderer.invoke("app"),
-});
+contextBridge.exposeInMainWorld("api", api);

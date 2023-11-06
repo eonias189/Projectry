@@ -9,4 +9,5 @@
       "allowSyntheticDefaultImports": true,
     },
     "include": ["./src/**/*"],
+    "files": ["./src/index.d.ts"]
 }

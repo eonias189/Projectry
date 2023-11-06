@@ -4,6 +4,7 @@
   "description": "programm that helps to develop the architecture of you project",
   "main": "dist/main.js",
   "scripts": {
+    "build-frontend": "cd frontend && npm run build && cd ..",
     "transpile": "tsc",
     "start": "electron .",
     "package": "electron-forge package",

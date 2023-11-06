@@ -1,19 +1,48 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index";
 
 interface ThemeSwitcherProps {
-    class?: string,
-    label: string,
+    class?: string;
+    label: string;
 }
 
-declare const api: {
-    getApp: () => Promise<any>
-};
+interface ApiUserProps {
+    class?: string;
+    channel: string;
+    args: any[];
+    timeout?: number;
+}
+
+class ApiUser extends React.Component<ApiUserProps> {
+    static defaultProps = { timeout: 500, class: "api-user btn" };
+    constructor(props: ApiUserProps) {
+        super(props);
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick() {
+        setTimeout(
+            () =>
+                api[this.props.channel](...this.props.args).then((resp) =>
+                    alert(resp)
+                ),
+            this.props.timeout
+        );
+    }
+
+    render(): React.ReactNode {
+        return (
+            <button onClick={this.handleClick} className={this.props.class}>
+                {this.props.channel}
+            </button>
+        );
+    }
+}
 
 class ThemeSwitcher extends React.Component<ThemeSwitcherProps> {
-    static defaultProps = { class: "theme-switcher", };
-    bodyElement: HTMLElement = document.body
+    static defaultProps = { class: "theme-switcher btn" };
+    bodyElement: HTMLElement = document.body;
 
     constructor(props: ThemeSwitcherProps) {
         super(props);
@@ -21,30 +50,30 @@ class ThemeSwitcher extends React.Component<ThemeSwitcherProps> {
     }
 
     handleClick() {
-        setTimeout(() => {
-            api.getApp().then(
-                app => alert((app as {name: string}).name)
-            )
-        }, 1500);
-        this.bodyElement.classList.toggle('dark');
+        this.bodyElement.classList.toggle("dark");
     }
 
-    render() {
-        return <button className={this.props.class} onClick={this.handleClick}>{this.props.label}</button>
+    render(): React.ReactNode {
+        return (
+            <button className={this.props.class} onClick={this.handleClick}>
+                {this.props.label}
+            </button>
+        );
     }
 }
 
 class App extends React.Component {
-    render() {
-        return <div>
-            <ThemeSwitcher label='theme-switcher'/>
-        </div>
+    render(): React.ReactNode {
+        return (
+            <div>
+                <ThemeSwitcher label="theme-switcher" />
+                <ApiUser channel="getMyFeature" args={["Serg"]} />
+                <ApiUser channel="getSumNums" args={[2, 2]} />
+            </div>
+        );
     }
 }
 
-
 const appElement = document.getElementById("app");
 const root = ReactDOM.createRoot(appElement);
-root.render(
-    <App />
-)
+root.render(<App />);
