@@ -1,0 +1,18 @@
+[
+  {
+    "path": "lala",
+    "alive": true
+  },
+  {
+    "path": "lol",
+    "alive": false
+  },
+  {
+    "path": "lol",
+    "alive": false
+  },
+  {
+    "path": "lol",
+    "alive": false
+  }
+]

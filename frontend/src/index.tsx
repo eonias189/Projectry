@@ -21,7 +21,7 @@ class ApiUser extends React.Component<ApiUserProps> {
         this.handleClick = this.handleClick.bind(this);
     }
 
-    handleClick() {
+    private handleClick() {
         setTimeout(
             () =>
                 api[this.props.channel](...this.props.args).then((resp) =>
@@ -31,7 +31,7 @@ class ApiUser extends React.Component<ApiUserProps> {
         );
     }
 
-    render(): React.ReactNode {
+    public render(): React.ReactNode {
         return (
             <button onClick={this.handleClick} className={this.props.class}>
                 {this.props.channel}
@@ -42,18 +42,18 @@ class ApiUser extends React.Component<ApiUserProps> {
 
 class ThemeSwitcher extends React.Component<ThemeSwitcherProps> {
     static defaultProps = { class: "theme-switcher btn" };
-    bodyElement: HTMLElement = document.body;
+    private bodyElement: HTMLElement = document.body;
 
     constructor(props: ThemeSwitcherProps) {
         super(props);
         this.handleClick = this.handleClick.bind(this);
     }
 
-    handleClick() {
+    private handleClick() {
         this.bodyElement.classList.toggle("dark");
     }
 
-    render(): React.ReactNode {
+    public render(): React.ReactNode {
         return (
             <button className={this.props.class} onClick={this.handleClick}>
                 {this.props.label}
@@ -63,12 +63,12 @@ class ThemeSwitcher extends React.Component<ThemeSwitcherProps> {
 }
 
 class App extends React.Component {
-    render(): React.ReactNode {
+    public render(): React.ReactNode {
         return (
             <div>
                 <ThemeSwitcher label="theme-switcher" />
                 <ApiUser channel="getMyFeature" args={["Serg"]} />
-                <ApiUser channel="getSumNums" args={[2, 2]} />
+                <ApiUser channel="sumNums" args={[2, 2]} />
             </div>
         );
     }
