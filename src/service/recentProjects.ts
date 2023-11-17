@@ -1,5 +1,4 @@
 import { JsonHandler } from "./jsonHandlerModel";
-import fs from "fs";
 
 export type Project = {
     path: string;
@@ -8,6 +7,12 @@ export type Project = {
 
 export type RecentProjectsJson = Array<Project>;
 
+const defaulData: RecentProjectsJson = [];
+
 export class RecentProjectHandler extends JsonHandler<RecentProjectsJson> {
     public fileName = "recent-projects.json";
+
+    constructor(dataDir: string) {
+        super(dataDir, defaulData);
+    }
 }

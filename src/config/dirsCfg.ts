@@ -10,7 +10,9 @@ export interface DirsCfgInterface {
 const rootDir = dirname(dirname(__dirname)); //dirsCfg.js is in root/dist/data
 const frontendDir = join(rootDir, "frontend");
 const preloadURL = join(rootDir, "dist", "preload.js");
-const dataDir = join(rootDir, "data");
+
+const appDataDir = process.env.AppData as string;
+const dataDir = join(appDataDir, "projectry", "data");
 
 const dirsCfg: DirsCfgInterface = {
     rootDir,

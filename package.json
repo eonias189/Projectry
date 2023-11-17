@@ -5,6 +5,7 @@
   "main": "dist/main.js",
   "scripts": {
     "build-frontend": "cd frontend && npm run build && cd ..",
+    "b-f": "npm run build-frontend",
     "transpile": "tsc",
     "start": "electron .",
     "package": "electron-forge package",

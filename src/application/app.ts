@@ -3,6 +3,15 @@ import { ConfigInterface } from "../config";
 import { apiHandlers } from "../api";
 import { join } from "node:path";
 
+function logFunc(func: (...args: any[]) => any): (...args: any[]) => any {
+    return function (...args: any[]): any {
+        console.log(func.name, [...arguments]);
+        let res = func(...args);
+        console.log(res);
+        return res;
+    };
+}
+
 export class Application {
     private cfg: ConfigInterface;
     constructor(cfg: ConfigInterface) {
@@ -23,7 +32,7 @@ export class Application {
 
     public handleAllApi() {
         for (let handler of apiHandlers) {
-            ipcMain.handle(handler.name, handler);
+            ipcMain.handle(handler.name, logFunc(handler));
         }
     }
 
@@ -42,6 +51,7 @@ export class Application {
             if (process.platform !== "darwin") {
                 app.quit();
             }
+            app.quit();
         });
     }
 }

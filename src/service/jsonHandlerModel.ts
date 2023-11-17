@@ -34,9 +34,11 @@ export class JsonHandler<JsonModel extends Object>
 {
     public fileName?: string;
     private dataDir: string;
+    private defaultData: JsonModel;
 
-    constructor(dataDir: string) {
+    constructor(dataDir: string, defaultData: JsonModel) {
         this.dataDir = dataDir;
+        this.defaultData = defaultData;
     }
 
     private getFullPath(): string {
@@ -52,6 +54,11 @@ export class JsonHandler<JsonModel extends Object>
 
     public getData(): JsonModel {
         let fullPath = this.getFullPath();
+        if (!fs.existsSync(fullPath)) {
+            fs.mkdir(this.dataDir, console.log);
+            this.setData(this.defaultData);
+            return this.defaultData;
+        }
         let dataString = fs.readFileSync(fullPath, "utf-8");
         let dataJson = JSON.parse(dataString) as JsonModel;
         return dataJson;
@@ -60,6 +67,6 @@ export class JsonHandler<JsonModel extends Object>
     public setData(data: JsonModel) {
         let fullPath = this.getFullPath();
         let dataString = JSON.stringify(data, null, 2);
-        fs.writeFileSync(fullPath, dataString);
+        fs.writeFileSync(fullPath, dataString, "utf-8");
     }
 }

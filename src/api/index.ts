@@ -1,9 +1,19 @@
-import { myFeature, getMyFeature } from "./myFeature";
-import { sumNums, sumNumsHandler } from "./sumNums";
+import {
+    newProject,
+    getNewProject,
+    getProjects,
+    getGetProjects,
+    addProject,
+    getAddProject,
+    removeProject,
+    getRemoveProject,
+} from "./recentProjects";
 
 export const api = {
-    getMyFeature,
-    sumNums,
+    newProject: getNewProject,
+    getProjects: getGetProjects,
+    addProject: getAddProject,
+    removeProject: getRemoveProject,
 };
 
-export const apiHandlers = [myFeature, sumNumsHandler];
+export const apiHandlers = [newProject, getProjects, addProject, removeProject];
