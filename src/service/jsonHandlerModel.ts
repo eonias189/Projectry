@@ -1,18 +1,38 @@
 import fs from "fs";
 import { join } from "node:path";
 
-export interface JsonHandlerInterface<JsonModel, NewEntityFunc> {
-    fileName?: string;
-    getData(): JsonModel;
-    setData(data: JsonModel): void;
-    newEntity?: NewEntityFunc;
+export interface ConnectionInterface<JsonModel extends Object> {
+    data: JsonModel;
+    save(): void;
 }
 
-export class JsonHandler<JsonModel, NewEntityFunc>
-    implements JsonHandlerInterface<JsonModel, NewEntityFunc>
+export interface JsonHandlerInterface<JsonModel extends Object> {
+    fileName?: string;
+    getConnection(): ConnectionInterface<JsonModel>;
+    getData(): JsonModel;
+    setData(data: JsonModel): void;
+}
+
+export class Connection<JsonModel extends Object>
+    implements ConnectionInterface<JsonModel>
+{
+    public data: JsonModel;
+    private jsonHandler: JsonHandlerInterface<JsonModel>;
+
+    constructor(data: JsonModel, jsonHandler: JsonHandlerInterface<JsonModel>) {
+        this.data = data;
+        this.jsonHandler = jsonHandler;
+    }
+
+    public save() {
+        this.jsonHandler.setData(this.data);
+    }
+}
+
+export class JsonHandler<JsonModel extends Object>
+    implements JsonHandlerInterface<JsonModel>
 {
     public fileName?: string;
-    public newEntity?: NewEntityFunc;
     private dataDir: string;
 
     constructor(dataDir: string) {
@@ -24,6 +44,10 @@ export class JsonHandler<JsonModel, NewEntityFunc>
             throw new Error("filename not defined");
         }
         return join(this.dataDir, this.fileName);
+    }
+
+    public getConnection(): ConnectionInterface<JsonModel> {
+        return new Connection(this.getData(), this);
     }
 
     public getData(): JsonModel {

@@ -1,8 +1,7 @@
 import { ipcRenderer } from "electron";
-import { someFeature } from "../testCases";
 
 export function sumNumsHandler(event: any, ...nums: number[]): number {
-    return someFeature(...nums);
+    return nums.reduce((sum, item) => sum + item);
 }
 
 export function sumNums(...nums: number[]): Promise<number> {
