@@ -9,11 +9,11 @@ import {
     getRemoveProject,
 } from "./recentProjects";
 
-export const api = {
+export const api = () => ({
     newProject: getNewProject,
     getProjects: getGetProjects,
     addProject: getAddProject,
     removeProject: getRemoveProject,
-};
+});
 
 export const apiHandlers = [newProject, getProjects, addProject, removeProject];

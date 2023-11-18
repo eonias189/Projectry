@@ -26,6 +26,7 @@ class AddProject extends React.Component<AddProjectProps> {
         setTimeout(() => {
             api()
                 .addProject(project)
+                .then(alert)
                 .catch(() => alert("Ошибка!"));
         }, this.props.timeout);
     }
@@ -39,35 +40,62 @@ class AddProject extends React.Component<AddProjectProps> {
     }
 }
 
-interface ApiUserProps {
+interface GetProjectsProps {
     class?: string;
-    channel: string;
-    args: any[];
     timeout?: number;
 }
 
-class ApiUser extends React.Component<ApiUserProps> {
+class GetProjects extends React.Component<GetProjectsProps> {
     static defaultProps = { timeout: 500, class: "api-user btn" };
-    constructor(props: ApiUserProps) {
+    constructor(props: GetProjectsProps) {
         super(props);
         this.handleClick = this.handleClick.bind(this);
     }
 
-    private handleClick() {
-        setTimeout(
-            () =>
-                api()
-                    [this.props.channel](...this.props.args)
-                    .then((resp) => alert(JSON.stringify(resp)))
-                    .catch(() => alert("Ошибка!")),
-            this.props.timeout
-        );
+    private async handleClick() {
+        setTimeout(() => {
+            api()
+                .getProjects()
+                .then((projects) => alert(JSON.stringify(projects)))
+                .catch(() => alert("Ошибка!"));
+        }, this.props.timeout);
     }
 
     public render(): React.ReactNode {
         return (
-            <button onClick={this.handleClick} className={this.props.class}>
-                {this.props.channel}
+            <button className={this.props.class} onClick={this.handleClick}>
+                getProjects
+            </button>
+        );
+    }
+}
+
+interface RemoveProjectProps {
+    path: string;
+    class?: string;
+    timeout?: number;
+}
+
+class RemoveProject extends React.Component<RemoveProjectProps> {
+    static defaultProps = { timeout: 500, class: "api-user btn" };
+    constructor(props: RemoveProjectProps) {
+        super(props);
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    private async handleClick() {
+        setTimeout(() => {
+            api()
+                .removeProject(this.props.path)
+                .then(alert)
+                .catch(() => alert("Ошибка!"));
+        }, this.props.timeout);
+    }
+
+    public render(): React.ReactNode {
+        return (
+            <button className={this.props.class} onClick={this.handleClick}>
+                removeProject
             </button>
         );
     }
@@ -100,15 +128,14 @@ class App extends React.Component {
         return (
             <div>
                 <ThemeSwitcher label="theme-switcher" />
-                <ApiUser channel="newProject" args={["path", true]} />
-                <ApiUser channel="getProjects" args={[]} />
+                <GetProjects />
                 <AddProject path="wasAdded" alive={true} />
-                <ApiUser channel="removeProject" args={["wasAdded"]} />
+                <RemoveProject path="wasAdded" />
             </div>
         );
     }
 }
 
 const appElement = document.getElementById("app");
-const root = ReactDOM.createRoot(appElement);
+const root = ReactDOM.createRoot(appElement as HTMLElement);
 root.render(<App />);

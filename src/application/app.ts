@@ -27,7 +27,7 @@ export class Application {
                 preload: this.cfg.preloadURL,
             },
         });
-        win.loadFile(join(this.cfg.frontendDir, "index.html"));
+        win.loadFile(join(this.cfg.publicDir, "index.html"));
     }
 
     public handleAllApi() {

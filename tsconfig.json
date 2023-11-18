@@ -5,14 +5,19 @@
       "strict": true,
       "esModuleInterop": true,
       "skipLibCheck": true,
+      "allowJs": true,
+      "moduleResolution": "node",
+      "allowSyntheticDefaultImports": true,
+      "jsx": "react",
       "forceConsistentCasingInFileNames": true,
-      "outDir": "dist",
+      "outDir": "./dist/",
       "experimentalDecorators": true
     },
     "include": [
-      "src/**/*.ts",
+      "src/",
     ],
     "exclude": [
-      "node_modules"
+      "node_modules",
     ],
+    "files": ["src/index.d.ts"]
   }
