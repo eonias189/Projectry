@@ -3,7 +3,7 @@ import {
     RecentProjectHandler,
     Project,
     RecentProjectsJson,
-} from "../service/recentProjects";
+} from "../jsonStorage/recentProjects";
 import { ipcRenderer } from "electron";
 
 const recentProjects = new RecentProjectHandler(config.dataDir);
