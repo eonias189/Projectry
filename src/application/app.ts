@@ -27,6 +27,7 @@ export class Application {
                 preload: this.cfg.preloadURL,
             },
         });
+        win.webContents.openDevTools();
         win.loadFile(join(this.cfg.publicDir, "index.html"));
     }
 
