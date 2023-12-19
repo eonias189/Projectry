@@ -1,19 +1,23 @@
 import {
-    newProject,
-    getNewProject,
     getProjects,
-    getGetProjects,
     addProject,
-    getAddProject,
+    newProject,
     removeProject,
-    getRemoveProject,
 } from "./recentProjects";
+import { ApiFunc, InvokeFunction } from "./apiFunc";
 
-export const api = () => ({
-    newProject: getNewProject,
-    getProjects: getGetProjects,
-    addProject: getAddProject,
-    removeProject: getRemoveProject,
-});
+export const apiHandlers = {
+    getProjects,
+    addProject,
+    newProject,
+    removeProject,
+};
 
-export const apiHandlers = [newProject, getProjects, addProject, removeProject];
+export type apiType = () => {
+    [name in keyof typeof apiHandlers]: (typeof apiHandlers)[name]["invoke"];
+};
+
+const apiObj = Object.fromEntries(
+    Object.values(apiHandlers).map((handler) => [handler.name, handler.invoke])
+);
+export const api = () => apiObj;

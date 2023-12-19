@@ -1,2 +1,2 @@
-declare const api: typeof import("./api").api;
 declare module "*.css" {}
+declare const api: import("./api").apiType;

@@ -5,11 +5,12 @@ import {
     RecentProjectsJson,
 } from "../jsonStorage/recentProjects";
 import { ipcRenderer } from "electron";
+import { getApiFunc } from "./apiFunc";
 
 const recentProjects = new RecentProjectHandler(config.dataDir);
 const connection = recentProjects.getConnection();
 
-export function newProject(
+function newProjectHandler(
     event: Electron.IpcMainInvokeEvent,
     path: string,
     alive: boolean
@@ -20,24 +21,16 @@ export function newProject(
     };
 }
 
-export function getNewProject(path: string, alive: boolean): Promise<Project> {
-    return ipcRenderer.invoke("newProject", path, alive);
-}
-
-export function getProjects(
+function getProjectsHandler(
     event: Electron.IpcMainInvokeEvent
 ): RecentProjectsJson {
     return connection.data;
 }
 
-export function getGetProjects(): Promise<RecentProjectsJson> {
-    return ipcRenderer.invoke("getProjects");
-}
-
-export function addProject(
+function addProjectHandler(
     event: Electron.IpcMainInvokeEvent,
     project: Project
-): undefined {
+): void {
     connection.data.forEach((prj) => {
         if (project.path == prj.path) {
             throw new Error("Project already exists");
@@ -47,14 +40,10 @@ export function addProject(
     connection.save();
 }
 
-export function getAddProject(project: Project): Promise<undefined | void> {
-    return ipcRenderer.invoke("addProject", project);
-}
-
-export function removeProject(
+function removeProjectHandler(
     event: Electron.IpcMainInvokeEvent,
     path: string
-): undefined {
+): void {
     let lengthWas = connection.data.length;
     connection.data = connection.data.filter(
         (project) => project.path !== path
@@ -65,6 +54,7 @@ export function removeProject(
     connection.save();
 }
 
-export function getRemoveProject(path: string): Promise<void> {
-    return ipcRenderer.invoke("removeProject", path);
-}
+export const newProject = getApiFunc(newProjectHandler);
+export const getProjects = getApiFunc(getProjectsHandler);
+export const addProject = getApiFunc(addProjectHandler);
+export const removeProject = getApiFunc(removeProjectHandler);
