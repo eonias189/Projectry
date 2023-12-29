@@ -10,9 +10,7 @@ export type RecentProjectsJson = Array<Project>;
 const defaulData: RecentProjectsJson = [];
 
 export class RecentProjectHandler extends JsonHandler<RecentProjectsJson> {
-    public fileName = "recent-projects.json";
-
     constructor(dataDir: string) {
-        super(dataDir, defaulData);
+        super(dataDir, "recent-projects.json", defaulData);
     }
 }

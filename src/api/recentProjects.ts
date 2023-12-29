@@ -8,29 +8,29 @@ import { ipcRenderer } from "electron";
 import { getApiFunc } from "./apiFunc";
 
 const recentProjects = new RecentProjectHandler(config.dataDir);
-const connection = recentProjects.getConnection();
 
-function newProjectHandler(
+async function newProjectHandler(
     event: Electron.IpcMainInvokeEvent,
     path: string,
     alive: boolean
-): Project {
+): Promise<Project> {
     return {
         path,
         alive,
     };
 }
 
-function getProjectsHandler(
+async function getProjectsHandler(
     event: Electron.IpcMainInvokeEvent
-): RecentProjectsJson {
-    return connection.data;
+): Promise<RecentProjectsJson> {
+    return (await recentProjects.getConnection()).data;
 }
 
-function addProjectHandler(
+async function addProjectHandler(
     event: Electron.IpcMainInvokeEvent,
     project: Project
-): void {
+): Promise<void> {
+    let connection = await recentProjects.getConnection();
     connection.data.forEach((prj) => {
         if (project.path == prj.path) {
             throw new Error("Project already exists");
@@ -40,10 +40,11 @@ function addProjectHandler(
     connection.save();
 }
 
-function removeProjectHandler(
+async function removeProjectHandler(
     event: Electron.IpcMainInvokeEvent,
     path: string
-): void {
+): Promise<void> {
+    let connection = await recentProjects.getConnection();
     let lengthWas = connection.data.length;
     connection.data = connection.data.filter(
         (project) => project.path !== path

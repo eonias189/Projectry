@@ -33,7 +33,7 @@ export class Application {
 
     public handleAllApi() {
         for (let handler of Object.values(apiHandlers)) {
-            ipcMain.handle(handler.name, logFunc(handler.handle));
+            ipcMain.handle(handler.name, handler.handle);
         }
     }
 

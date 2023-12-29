@@ -1,16 +1,17 @@
-import fs from "fs";
+import fsPromises from "node:fs/promises";
+import fs from "node:fs";
 import { join } from "node:path";
 
 export interface ConnectionInterface<JsonModel extends Object> {
     data: JsonModel;
-    save(): void;
+    save(): Promise<void>;
 }
 
 export interface JsonHandlerInterface<JsonModel extends Object> {
     fileName?: string;
-    getConnection(): ConnectionInterface<JsonModel>;
-    getData(): JsonModel;
-    setData(data: JsonModel): void;
+    getConnection(): Promise<ConnectionInterface<JsonModel>>;
+    getData(): Promise<JsonModel>;
+    setData(data: JsonModel): Promise<void>;
 }
 
 export class Connection<JsonModel extends Object>
@@ -24,49 +25,47 @@ export class Connection<JsonModel extends Object>
         this.jsonHandler = jsonHandler;
     }
 
-    public save() {
-        this.jsonHandler.setData(this.data);
+    public async save(): Promise<void> {
+        await this.jsonHandler.setData(this.data);
     }
 }
 
 export class JsonHandler<JsonModel extends Object>
     implements JsonHandlerInterface<JsonModel>
 {
-    public fileName?: string;
+    public fileName: string;
     private dataDir: string;
     private defaultData: JsonModel;
+    private fullPath: string;
+    private connection?: ConnectionInterface<JsonModel>;
 
-    constructor(dataDir: string, defaultData: JsonModel) {
+    constructor(dataDir: string, fileName: string, defaultData: JsonModel) {
         this.dataDir = dataDir;
+        this.fileName = fileName;
+        this.fullPath = join(this.dataDir, this.fileName);
         this.defaultData = defaultData;
     }
 
-    private getFullPath(): string {
-        if (this.fileName == undefined) {
-            throw new Error("filename not defined");
+    public async getConnection(): Promise<ConnectionInterface<JsonModel>> {
+        if (!this.connection) {
+            this.connection = new Connection(await this.getData(), this);
         }
-        return join(this.dataDir, this.fileName);
+        return this.connection;
     }
 
-    public getConnection(): ConnectionInterface<JsonModel> {
-        return new Connection(this.getData(), this);
-    }
-
-    public getData(): JsonModel {
-        let fullPath = this.getFullPath();
-        if (!fs.existsSync(fullPath)) {
-            fs.mkdir(this.dataDir, console.log);
-            this.setData(this.defaultData);
+    public async getData(): Promise<JsonModel> {
+        if (!fs.existsSync(this.fullPath)) {
+            await fsPromises.mkdir(this.dataDir);
+            await this.setData(this.defaultData);
             return this.defaultData;
         }
-        let dataString = fs.readFileSync(fullPath, "utf-8");
+        let dataString = await fsPromises.readFile(this.fullPath, "utf-8");
         let dataJson = JSON.parse(dataString) as JsonModel;
         return dataJson;
     }
 
-    public setData(data: JsonModel) {
-        let fullPath = this.getFullPath();
+    public async setData(data: JsonModel) {
         let dataString = JSON.stringify(data, null, 2);
-        fs.writeFileSync(fullPath, dataString, "utf-8");
+        return await fsPromises.writeFile(this.fullPath, dataString);
     }
 }

@@ -3,16 +3,20 @@ import { ipcRenderer } from "electron";
 export interface ApiFunc<P extends [...any], R> {
     name: string;
     handle(e: Electron.IpcMainInvokeEvent, ...args: P): R;
-    invoke(...args: P): Promise<R>;
+    invoke: InvokeFunction<P, R>;
 }
 
-export type InvokeFunction<P extends [...any], R> = (...args: P) => Promise<R>;
+export type InvokeFunction<P extends [...any], R> = (
+    ...args: P
+) => Promise<UnPromise<R>>;
+
+type UnPromise<T> = T extends Promise<infer R> ? UnPromise<R> : T;
 
 function getInvokeFunction<P extends [...any], R>(
     name: string
 ): InvokeFunction<P, R> {
-    return function (...args: P): Promise<R> {
-        return ipcRenderer.invoke(name, ...args);
+    return async function (...args: P): Promise<UnPromise<R>> {
+        return await ipcRenderer.invoke(name, ...args);
     };
 }
 
