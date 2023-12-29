@@ -37,7 +37,7 @@ async function addProjectHandler(
         }
     });
     connection.data.push(project);
-    connection.save();
+    await connection.save();
 }
 
 async function removeProjectHandler(
@@ -52,7 +52,7 @@ async function removeProjectHandler(
     if (connection.data.length == lengthWas) {
         throw new Error("project doesn`t exist");
     }
-    connection.save();
+    await connection.save();
 }
 
 export const newProject = getApiFunc(newProjectHandler);
