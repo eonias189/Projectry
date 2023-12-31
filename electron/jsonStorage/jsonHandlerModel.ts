@@ -1,5 +1,5 @@
-import fsPromises from "node:fs/promises";
-import fs from "node:fs";
+import { mkdir, writeFile, readFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import { join } from "node:path";
 
 export interface ConnectionInterface<JsonModel extends Object> {
@@ -54,18 +54,18 @@ export class JsonHandler<JsonModel extends Object>
     }
 
     public async getData(): Promise<JsonModel> {
-        if (!fs.existsSync(this.fullPath)) {
-            await fsPromises.mkdir(this.dataDir);
+        if (!existsSync(this.fullPath)) {
+            await mkdir(this.dataDir);
             await this.setData(this.defaultData);
             return this.defaultData;
         }
-        let dataString = await fsPromises.readFile(this.fullPath, "utf-8");
+        let dataString = await readFile(this.fullPath, "utf-8");
         let dataJson = JSON.parse(dataString) as JsonModel;
         return dataJson;
     }
 
     public async setData(data: JsonModel) {
         let dataString = JSON.stringify(data, null, 2);
-        return await fsPromises.writeFile(this.fullPath, dataString);
+        return await writeFile(this.fullPath, dataString);
     }
 }

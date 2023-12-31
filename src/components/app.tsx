@@ -1,5 +1,6 @@
-import React from "react";
+import React, { FC } from "react";
 import StyledButton from "./UI/StyledButton/StyledButton";
+import { HashRouter, Routes, Route, NavLink } from "react-router-dom";
 
 interface ThemeSwitcherProps {
     class?: string;
@@ -96,37 +97,50 @@ class RemoveProject extends React.Component<RemoveProjectProps> {
     }
 }
 
-class ThemeSwitcher extends React.Component<ThemeSwitcherProps> {
-    static defaultProps = { class: "theme-switcher btn" };
-    private bodyElement: HTMLElement = document.body;
+const ThemeSwitcher: FC<ThemeSwitcherProps> = (props) => {
+    const body = document.body;
+    const [someState, setSomeState] = React.useState<boolean>(false);
+    const handleClick = () => {
+        body.classList.toggle("dark");
+        setSomeState(!someState);
+    };
+    return (
+        <StyledButton onClick={handleClick}>
+            Theme Switcher({someState ? "переключено" : "непереключено"})
+        </StyledButton>
+    );
+};
 
-    constructor(props: ThemeSwitcherProps) {
-        super(props);
-        this.handleClick = this.handleClick.bind(this);
-    }
-
-    private handleClick() {
-        this.bodyElement.classList.toggle("dark");
-    }
-
-    public render(): React.ReactNode {
-        return (
-            <StyledButton onClick={this.handleClick}>
-                {this.props.label}
-            </StyledButton>
-        );
-    }
-}
-
-export interface AppProps {}
-
-export function App(props: AppProps) {
+const MainPage: FC = () => {
     return (
         <div>
             <ThemeSwitcher label="theme-switcher" />
             <GetProjects />
             <AddProject path="wasAdded" alive={true} />
             <RemoveProject path="wasAdded" />
+            <NavLink to="/page2">На 2 страницу</NavLink>
         </div>
     );
-}
+};
+
+const Page2: FC = () => {
+    return (
+        <>
+            <p> Page 2</p>
+            <NavLink to="/">На главную страницу</NavLink>
+        </>
+    );
+};
+
+const App: FC = () => {
+    return (
+        <HashRouter>
+            <Routes>
+                <Route path="/" element={<MainPage />} />
+                <Route path="/page2" element={<Page2 />} />
+            </Routes>
+        </HashRouter>
+    );
+};
+
+export default App;

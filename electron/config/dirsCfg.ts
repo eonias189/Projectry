@@ -5,11 +5,13 @@ export interface DirsCfgInterface {
     publicDir: string;
     preloadURL: string;
     dataDir: string;
+    buildDir: string;
 }
 
-const rootDir = dirname(dirname(__dirname)); //dirsCfg.js is in root/dist/data
+const rootDir = dirname(dirname(dirname(__dirname))); //dirsCfg.js is in root/build/electron/config
+const buildDir = join(rootDir, "build");
 const publicDir = join(rootDir, "public");
-const preloadURL = join(rootDir, "dist", "preload.js");
+const preloadURL = join(buildDir, "electron", "preload.js");
 
 const appDataDir = process.env.AppData as string;
 const dataDir = join(appDataDir, "projectry", "data");
@@ -17,6 +19,7 @@ const dataDir = join(appDataDir, "projectry", "data");
 const dirsCfg: DirsCfgInterface = {
     rootDir,
     publicDir,
+    buildDir,
     preloadURL,
     dataDir,
 };

@@ -29,7 +29,7 @@ body.dark h1 {
     color: #fff;
 }
 
-#app > div {
+#root > div {
     display: flex;
     flex-direction: column;
     gap: 5px;
