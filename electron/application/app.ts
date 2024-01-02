@@ -23,6 +23,7 @@ export class Application {
         const win = new BrowserWindow({
             width: this.cfg.width,
             height: this.cfg.height,
+            autoHideMenuBar: app.isPackaged,
             webPreferences: {
                 nodeIntegration: true,
                 preload: this.cfg.preloadURL,
