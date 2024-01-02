@@ -32,9 +32,7 @@ class AddProject extends React.Component<AddProjectProps> {
     }
 
     public render(): React.ReactNode {
-        return (
-            <StyledButton onClick={this.handleClick}>addProject</StyledButton>
-        );
+        return <StyledButton onClick={this.handleClick}>addProject</StyledButton>;
     }
 }
 
@@ -60,9 +58,7 @@ class GetProjects extends React.Component<GetProjectsProps> {
     }
 
     public render(): React.ReactNode {
-        return (
-            <StyledButton onClick={this.handleClick}>getProjects</StyledButton>
-        );
+        return <StyledButton onClick={this.handleClick}>getProjects</StyledButton>;
     }
 }
 
@@ -89,11 +85,7 @@ class RemoveProject extends React.Component<RemoveProjectProps> {
     }
 
     public render(): React.ReactNode {
-        return (
-            <StyledButton onClick={this.handleClick}>
-                removeProject
-            </StyledButton>
-        );
+        return <StyledButton onClick={this.handleClick}>removeProject</StyledButton>;
     }
 }
 

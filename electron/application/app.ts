@@ -1,8 +1,6 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import { join } from "path";
-import installExtension, {
-    REACT_DEVELOPER_TOOLS,
-} from "electron-devtools-installer";
+import installExtension, { REACT_DEVELOPER_TOOLS } from "electron-devtools-installer";
 import { ConfigInterface } from "../config";
 import { apiHandlers } from "../api";
 
@@ -54,7 +52,7 @@ export class Application {
 
     public handleAllApi() {
         for (let handler of Object.values(apiHandlers)) {
-            ipcMain.handle(handler.name, handler.handle);
+            ipcMain.handle(handler.name, handler);
         }
     }
 

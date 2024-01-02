@@ -14,9 +14,7 @@ export interface JsonHandlerInterface<JsonModel extends Object> {
     setData(data: JsonModel): Promise<void>;
 }
 
-export class Connection<JsonModel extends Object>
-    implements ConnectionInterface<JsonModel>
-{
+export class Connection<JsonModel extends Object> implements ConnectionInterface<JsonModel> {
     public data: JsonModel;
     private jsonHandler: JsonHandlerInterface<JsonModel>;
 
@@ -30,9 +28,7 @@ export class Connection<JsonModel extends Object>
     }
 }
 
-export class JsonHandler<JsonModel extends Object>
-    implements JsonHandlerInterface<JsonModel>
-{
+export class JsonHandler<JsonModel extends Object> implements JsonHandlerInterface<JsonModel> {
     public fileName: string;
     private dataDir: string;
     private defaultData: JsonModel;

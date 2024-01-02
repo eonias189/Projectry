@@ -1,23 +1,12 @@
-import {
-    getProjects,
-    addProject,
-    newProject,
-    removeProject,
-} from "./recentProjects";
-import { ApiFunc, InvokeFunction } from "./apiFunc";
+import { getInvokeFunction, TailAndPromise } from "./invokeFunc";
+import * as apiHandlers from "./apiHandlers";
 
-export const apiHandlers = {
-    getProjects,
-    addProject,
-    newProject,
-    removeProject,
-};
-
+export { apiHandlers };
 export type apiType = () => {
-    [name in keyof typeof apiHandlers]: (typeof apiHandlers)[name]["invoke"];
+    [name in keyof typeof apiHandlers]: TailAndPromise<(typeof apiHandlers)[name]>;
 };
-
+const apiHandlersArr = Array.from(Object.values(apiHandlers));
 const apiObj = Object.fromEntries(
-    Object.values(apiHandlers).map((handler) => [handler.name, handler.invoke])
+    apiHandlersArr.map((handler) => [handler.name, getInvokeFunction(handler.name)])
 );
 export const api = () => apiObj;
