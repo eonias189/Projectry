@@ -1,7 +1,8 @@
-import React, { FC } from "react";
+import { FC } from "react";
 // import StyledButton from "./UI/StyledButton/StyledButton";
 // import { HashRouter, Routes, Route, NavLink } from "react-router-dom";
 import Router from "./router";
+import Layout from "./layout";
 
 /* interface ThemeSwitcherProps {
     class?: string;
@@ -137,7 +138,11 @@ const App: FC = () => {
 }; */
 
 const App: FC = () => {
-    return <Router />;
+    return (
+        <Layout>
+            <Router />
+        </Layout>
+    );
 };
 
 export default App;
