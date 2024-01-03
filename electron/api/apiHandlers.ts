@@ -2,6 +2,9 @@ import { config } from "../config";
 import { RecentProjectHandler, Project, RecentProjectsJson } from "../jsonStorage/recentProjects";
 import { MainWindow } from "../application/mainWindow";
 import { dialog } from "electron";
+import { join } from "path";
+import { writeFile, mkdir } from "fs/promises";
+import { existsSync } from "fs";
 
 const recentProjects = new RecentProjectHandler(config.dataDir);
 
@@ -47,4 +50,16 @@ export async function chooseFolder(e: Electron.IpcMainInvokeEvent): Promise<stri
         properties: ["openDirectory"],
     });
     return resp.filePaths.length ? resp.filePaths[0] : "";
+}
+
+export async function createFile(
+    e: Electron.IpcMainInvokeEvent,
+    path: string,
+    fileName: string,
+    data: string
+): Promise<void> {
+    if (!existsSync(path)) {
+        await mkdir(path);
+    }
+    await writeFile(join(path, fileName), data);
 }
