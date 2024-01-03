@@ -1,5 +1,7 @@
 import { config } from "../config";
 import { RecentProjectHandler, Project, RecentProjectsJson } from "../jsonStorage/recentProjects";
+import { MainWindow } from "../application/mainWindow";
+import { dialog } from "electron";
 
 const recentProjects = new RecentProjectHandler(config.dataDir);
 
@@ -37,4 +39,12 @@ export async function removeProject(event: Electron.IpcMainInvokeEvent, path: st
         throw new Error("project doesn`t exist");
     }
     await connection.save();
+}
+
+export async function chooseFolder(e: Electron.IpcMainInvokeEvent): Promise<string> {
+    const mw = MainWindow.getInstance(config, false);
+    const resp = await dialog.showOpenDialog(mw.window, {
+        properties: ["openDirectory"],
+    });
+    return resp.filePaths.length ? resp.filePaths[0] : "";
 }

@@ -1,8 +1,8 @@
-import { app, BrowserWindow, ipcMain } from "electron";
-import { join } from "path";
+import { app, BrowserWindow, ipcMain, IpcMainInvokeEvent } from "electron";
 import installExtension, { REACT_DEVELOPER_TOOLS } from "electron-devtools-installer";
 import { ConfigInterface } from "../config";
 import { apiHandlers } from "../api";
+import { MainWindow } from "./mainWindow";
 
 function logFunc(func: (...args: any[]) => any): (...args: any[]) => any {
     return function (...args: any[]): any {
@@ -19,39 +19,11 @@ export class Application {
         this.cfg = cfg;
     }
 
-    public createWindow() {
-        const win = new BrowserWindow({
-            width: this.cfg.width,
-            height: this.cfg.height,
-            autoHideMenuBar: app.isPackaged,
-            webPreferences: {
-                nodeIntegration: true,
-                preload: this.cfg.preloadURL,
-            },
-        });
-        if (app.isPackaged) {
-            // 'build/index.html'
-            win.loadURL(`file://${this.cfg.buildDir}/index.html`);
-        } else {
-            win.loadURL("http://localhost:3000/index.html");
-
-            win.webContents.openDevTools();
-
-            // Hot Reloading on 'node_modules/.bin/electronPath'
-            require("electron-reload")(__dirname, {
-                electron: join(
-                    this.cfg.rootDir,
-                    "node_modules",
-                    ".bin",
-                    "electron" + (process.platform === "win32" ? ".cmd" : "")
-                ),
-                forceHardReset: true,
-                hardResetMethod: "exit",
-            });
-        }
+    private createWindow() {
+        const win = MainWindow.getInstance(this.cfg, app.isPackaged);
     }
 
-    public handleAllApi() {
+    private handleAllApi() {
         for (let handler of Object.values(apiHandlers)) {
             ipcMain.handle(handler.name, handler);
         }
