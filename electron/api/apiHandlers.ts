@@ -1,5 +1,5 @@
 import { config } from "../config";
-import { RecentProjectHandler, Project, RecentProjectsJson } from "../jsonStorage/recentProjects";
+import { RecentProjectHandler, Project, AllProjectsJson } from "../jsonStorage/AllProjects";
 import { MainWindow } from "../application/mainWindow";
 import { dialog } from "electron";
 import { join } from "path";
@@ -10,17 +10,23 @@ const recentProjects = new RecentProjectHandler(config.dataDir);
 
 export async function newProject(
     event: Electron.IpcMainInvokeEvent,
-    path: string,
-    alive: boolean
+    name: string,
+    path: string
 ): Promise<Project> {
     return {
+        name,
         path,
-        alive,
+        lastEditingDate: Date.now(),
     };
 }
 
-export async function getProjects(event: Electron.IpcMainInvokeEvent): Promise<RecentProjectsJson> {
-    return (await recentProjects.getConnection()).data;
+export async function getProjects(
+    event: Electron.IpcMainInvokeEvent,
+    limit?: number
+): Promise<AllProjectsJson> {
+    const connection = await recentProjects.getConnection();
+    limit = Math.min(limit ?? connection.data.length + 1, connection.data.length);
+    return connection.data.slice(0, limit);
 }
 
 export async function addProject(event: Electron.IpcMainInvokeEvent, project: Project): Promise<void> {

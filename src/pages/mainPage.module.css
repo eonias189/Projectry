@@ -1,0 +1,31 @@
+.mainPage {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    color: white;
+    place-items: center;
+    grid-template-rows: minmax(min-content, 15%) 1fr minmax(min-content, 15%);
+}
+
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.actionButtons {
+    display: flex;
+    margin-right: 10px;
+    gap: 10px;
+}
+
+.header p {
+    margin-left: 10px;
+    font-size: 1.6rem;
+}
+
+.footer {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}

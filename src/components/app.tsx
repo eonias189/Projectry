@@ -2,7 +2,6 @@ import { FC } from "react";
 // import StyledButton from "./UI/StyledButton/StyledButton";
 // import { HashRouter, Routes, Route, NavLink } from "react-router-dom";
 import Router from "./router";
-import Layout from "./layout";
 
 /* interface ThemeSwitcherProps {
     class?: string;
@@ -139,9 +138,9 @@ const App: FC = () => {
 
 const App: FC = () => {
     return (
-        <Layout>
+        <>
             <Router />
-        </Layout>
+        </>
     );
 };
 

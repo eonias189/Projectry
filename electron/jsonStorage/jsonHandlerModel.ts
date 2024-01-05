@@ -40,6 +40,7 @@ export class JsonHandler<JsonModel extends Object> implements JsonHandlerInterfa
         this.fileName = fileName;
         this.fullPath = join(this.dataDir, this.fileName);
         this.defaultData = defaultData;
+        this.checkFileExists();
     }
 
     public async getConnection(): Promise<ConnectionInterface<JsonModel>> {
@@ -49,12 +50,16 @@ export class JsonHandler<JsonModel extends Object> implements JsonHandlerInterfa
         return this.connection;
     }
 
-    public async getData(): Promise<JsonModel> {
-        if (!existsSync(this.fullPath)) {
+    private async checkFileExists() {
+        if (!existsSync(this.dataDir)) {
             await mkdir(this.dataDir);
-            await this.setData(this.defaultData);
-            return this.defaultData;
         }
+        if (!existsSync(this.fullPath)) {
+            await this.setData(this.defaultData);
+        }
+    }
+
+    public async getData(): Promise<JsonModel> {
         let dataString = await readFile(this.fullPath, "utf-8");
         let dataJson = JSON.parse(dataString) as JsonModel;
         return dataJson;

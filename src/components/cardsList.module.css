@@ -1,0 +1,43 @@
+.list {
+    display: flex;
+    flex-wrap: wrap;
+    align-self: start;
+}
+
+.row {
+    flex-direction: row;
+    width: 100%;
+}
+
+.column {
+    flex-direction: column;
+    height: 100%;
+}
+
+.item {
+    --max-cards-in-row: 4;
+}
+
+@media screen and (max-width: 1160px) {
+    .item {
+        --max-cards-in-row: 3;
+    }
+}
+
+@media screen and (max-width: 870px) {
+    .item {
+        --max-cards-in-row: 2;
+    }
+}
+
+@media screen and (max-width: 610px) {
+    .item {
+        --max-cards-in-row: 1;
+    }
+}
+
+.item {
+    display: flex;
+    flex-basis: calc(100% / var(--max-cards-in-row));
+    height: min-content;
+}
