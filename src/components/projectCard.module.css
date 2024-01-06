@@ -1,6 +1,6 @@
 .card {
     display: flex;
-    gap: 1.7rem;
+    /* gap: 1.7rem; */
     margin: 5px 10px;
     background-color: #333;
     border-radius: 5px;
@@ -27,9 +27,13 @@
 }
 
 .actionArea {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    position: relative;
+}
+
+.fix {
+    position: relative;
+    margin-top: 50%;
+    margin-left: 0%;
 }
 
 .actionButton {
