@@ -15,10 +15,12 @@ const DropDown: FC<DropDownProps> = ({ children, primaryElement, className }) =>
         <div className={className}>
             <div className={`${styles.dropDown} ${expanded ? styles.expanded : ""}`}>
                 <span
-                    className={`${styles.actionBtn} ${primaryElement ? "" : styles.noPrimary}`}
+                    className={`${styles.actionBtn} ${expanded ? styles.expanded : ""} ${
+                        primaryElement ? "" : styles.noPrimary
+                    }`}
                     onClick={() => setExpanded(!expanded)}
                 >
-                    {expanded ? expandedIcon : collapsedIcon}
+                    {collapsedIcon}
                 </span>
                 <div className={styles.primaryElement}>{primaryElement ?? <p></p>}</div>
                 <div className={`${styles.items} ${primaryElement ? "" : styles.noPrimary}`}>
