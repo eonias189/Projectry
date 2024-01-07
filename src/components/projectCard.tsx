@@ -4,7 +4,7 @@ import styles from "./projectCard.module.css";
 import Btn from "./UI/btn";
 import IconBtn from "./UI/iconBtn";
 import DropDown from "./dropDown";
-import { deleteIcon, openIcon } from "./UI/icons";
+import { deleteIcon, editIcon, openIcon, settingsIcon } from "./UI/icons";
 
 interface ProjectCardProps {
     project: Project;
@@ -29,15 +29,18 @@ const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
     return (
         <div className={styles.card}>
             <div className={styles.infoArea}>
-                <p className={styles.name}>Name: {project.name}</p>
+                <p className={styles.name}>{project.name}</p>
                 <p className={styles.path}>path: {project.path}</p>
                 <p className={styles.date}>last edited: {getDate(lastEditingDate)}</p>
             </div>
             <div className={styles.actionArea}>
-                <DropDown className={styles.fix}>
-                    <IconBtn>{deleteIcon}</IconBtn>
-                    <IconBtn>{openIcon}</IconBtn>
-                </DropDown>
+                <IconBtn>{openIcon}</IconBtn>
+                <div className={styles.fixer}>
+                    <DropDown expandElement={settingsIcon} className={styles.fix}>
+                        <IconBtn>{deleteIcon}</IconBtn>
+                        <IconBtn>{editIcon}</IconBtn>
+                    </DropDown>
+                </div>
             </div>
         </div>
     );

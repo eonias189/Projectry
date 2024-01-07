@@ -6,9 +6,10 @@ interface DropDownProps {
     children?: ReactNode;
     primaryElement?: ReactNode;
     className?: string;
+    expandElement?: ReactNode;
 }
 
-const DropDown: FC<DropDownProps> = ({ children, primaryElement, className }) => {
+const DropDown: FC<DropDownProps> = ({ children, primaryElement, className, expandElement }) => {
     const [expanded, setExpanded] = useState(false);
 
     return (
@@ -20,7 +21,7 @@ const DropDown: FC<DropDownProps> = ({ children, primaryElement, className }) =>
                     }`}
                     onClick={() => setExpanded(!expanded)}
                 >
-                    {collapsedIcon}
+                    {expandElement ?? collapsedIcon}
                 </span>
                 <div className={styles.primaryElement}>{primaryElement ?? <p></p>}</div>
                 <div className={`${styles.items} ${primaryElement ? "" : styles.noPrimary}`}>
