@@ -7,6 +7,7 @@ const useEditAble = <T extends Record<string, string>>(
 ): [
     values: T,
     element: ReactNode,
+    isAditind: boolean,
     startEdit: () => void,
     finishEdit: () => void,
     calcelEdit: () => void
@@ -47,7 +48,7 @@ const useEditAble = <T extends Record<string, string>>(
         </>
     );
 
-    return [values, element, startEdit, finishEdit, cancelEditing];
+    return [values, element, isAditing, startEdit, finishEdit, cancelEditing];
 };
 
 export default useEditAble;
