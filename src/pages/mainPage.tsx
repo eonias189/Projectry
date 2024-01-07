@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import type { Project } from "../types";
 import useFetcher from "../hooks/useFetcher";
 import styles from "./mainPage.module.css";
-import CardsList, { FlexDirection } from "../components/cardsList";
 import Btn from "../components/UI/btn";
 import ProjectCard from "../components/projectCard";
 interface MainPageProps {}
@@ -25,11 +24,11 @@ const MainPage: FC<MainPageProps> = ({}) => {
                     <Btn>Open project</Btn>
                 </div>
             </div>
-            <CardsList direction={FlexDirection.row} emptyCase={<p>No projects found</p>}>
+            <div className={styles.projectsContainer}>
                 {projects.map((project, id) => (
-                    <ProjectCard key={id} project={project} />
+                    <ProjectCard project={project} key={id} />
                 ))}
-            </CardsList>
+            </div>
             <div className={styles.footer}>
                 <Btn>show all projects</Btn>
             </div>

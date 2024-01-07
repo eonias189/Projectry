@@ -2,6 +2,7 @@
     padding: 0.4rem 0.6rem;
     cursor: pointer;
     border: none;
+    height: min-content;
     background-color: #555;
     border-radius: 5px;
     font-size: 0.8rem;

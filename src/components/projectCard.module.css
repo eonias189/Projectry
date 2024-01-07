@@ -30,14 +30,13 @@
 .actionArea {
     display: flex;
     align-items: center;
-    min-width: 5em;
+    min-width: 3.5em;
     gap: 0.3rem;
 }
 
 .fixer {
     position: relative;
-    align-self: self-start;
-    margin-top: 50%;
+    transform: translateY(-0.7em);
 }
 .fix {
     position: absolute;
