@@ -1,0 +1,45 @@
+.formContainer {
+    margin-top: 1.5em;
+    width: 350px;
+    height: 200px;
+    display: grid;
+    grid-template-rows: min-content min-content 1fr min-content;
+    gap: 0.2em;
+}
+
+.info {
+    text-align: center;
+}
+
+.pathArea {
+    position: relative;
+}
+
+.inputArea {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2em;
+}
+
+.errorMessage {
+    padding: 0.3em;
+    word-wrap: break-word;
+}
+
+.inputField {
+    width: 100%;
+}
+.chooseFolderBtn {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0.1rem;
+    display: grid;
+    place-items: center;
+}
+
+.createBtn {
+    justify-self: center;
+    width: min-content;
+}

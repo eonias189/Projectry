@@ -14,7 +14,6 @@ interface containerOptinos {
     mountNode?: HTMLElement;
 }
 export const createContainer = ({ id, mountNode = document.body }: containerOptinos) => {
-    console.log("+");
     if (document.getElementById(id)) {
         return;
     }

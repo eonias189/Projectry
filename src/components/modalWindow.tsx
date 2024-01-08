@@ -20,6 +20,7 @@ const ModalWindow: FC<ModalWindowProps> = ({ isShowing, children, close }) => {
 
     return isShowing ? (
         <Portal id={modalId}>
+            <div className={styles.overlay}></div>
             <div className={styles.modalWindow}>
                 <div className={styles.content}>
                     <IconBtn onClick={() => close()} className={styles.closeBtn}>

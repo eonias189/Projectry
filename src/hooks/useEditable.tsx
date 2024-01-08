@@ -31,9 +31,6 @@ const useEditAble = <T extends Record<string, string>>(
             {getEntries(values).map(([key, value], id) =>
                 isAditing ? (
                     <InputField
-                        onFocus={() => {
-                            console.log("focused");
-                        }}
                         key={id}
                         onChange={(e) => {
                             e.preventDefault();

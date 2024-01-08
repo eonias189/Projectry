@@ -62,7 +62,7 @@ const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
     return (
         <div className={styles.card}>
             <div className={styles.infoArea}>
-                <p className={styles.name}>{editaAbleName}</p>
+                <div className={styles.name}>{editaAbleName}</div>
                 <p className={styles.path}>path: {project.path}</p>
                 <p className={styles.date}>last edited: {getDate(lastEditingDate)}</p>
             </div>
