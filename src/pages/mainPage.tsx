@@ -1,22 +1,27 @@
 import { FC, FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { Project } from "../types";
-import useFetcher from "../hooks/useFetcher";
 import styles from "./mainPage.module.css";
 import Btn from "../components/UI/btn";
 import ProjectCard from "../components/projectCard";
 import { useModalWindow } from "../hooks/useModalWindow";
 import NewProjectModal from "../components/newProjectModal";
+import { fetchProjects } from "../manageState/projects";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
+import useLoader from "../hooks/useLoader";
+import { PROJECTS_DEFAULT_LIMIT } from "../assets";
 interface MainPageProps {}
 
 const MainPage: FC<MainPageProps> = ({}) => {
-    const navigate = useNavigate();
-    const ProjectsDefaultLimit = 5;
-    const [projects, projectsAreLoading, err] = useFetcher(
-        () => api().getProjects(ProjectsDefaultLimit),
-        []
-    );
-    const [openNewProjectModal, newProjectModal] = useModalWindow(<NewProjectModal />);
+    const dispatch = useAppDispatch();
+    const projects = useAppSelector((store) => store.projects);
+    const [projectsAreLoading, projectLoader] = useLoader();
+
+    useEffect(() => {
+        projectLoader.load(() => fetchProjects(dispatch, PROJECTS_DEFAULT_LIMIT));
+    }, []);
+
+    const [openNewProjectModal, closeNewProjectModal, getNewProjectModal] = useModalWindow();
+    const newProjectModal = getNewProjectModal(<NewProjectModal close={closeNewProjectModal} />);
 
     return (
         <div className={styles.mainPage}>
@@ -34,12 +39,14 @@ const MainPage: FC<MainPageProps> = ({}) => {
                 </div>
             </div>
             <div className={styles.projectsContainer}>
-                {projects.map((project, id) => (
-                    <ProjectCard project={project} key={id} />
+                {projects.map((project) => (
+                    <ProjectCard project={project} key={project.id} />
                 ))}
             </div>
             <div className={styles.footer}>
-                <Btn>show all projects</Btn>
+                <Btn onClick={() => projectLoader.load(() => fetchProjects(dispatch))}>
+                    show all projects
+                </Btn>
             </div>
         </div>
     );

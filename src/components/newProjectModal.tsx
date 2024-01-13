@@ -2,16 +2,22 @@ import { FC, useState } from "react";
 import styles from "./newProjectModal.module.css";
 import InputField from "./UI/inputField";
 import Btn from "./UI/btn";
-import IconBtn from "./UI/iconBtn";
 import { openIcon } from "./UI/icons";
-import { error } from "console";
+import { addProject } from "../manageState/projects";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
+import { PROJECTS_DEFAULT_LIMIT } from "../assets";
 
-interface NewProjectModalProps {}
+interface NewProjectModalProps {
+    close(): void;
+}
 
-const NewProjectModal: FC<NewProjectModalProps> = () => {
-    const [project, setProject] = useState<{ name: string; path: string; error?: Error }>({
+const NewProjectModal: FC<NewProjectModalProps> = ({ close }) => {
+    const dispatch = useAppDispatch();
+    const projectsLen = useAppSelector((store) => store.projects.length);
+    const [project, setProject] = useState<{ name: string; path: string; message: string }>({
         name: "",
         path: "",
+        message: "",
     });
     return (
         <form className={styles.formContainer}>
@@ -44,12 +50,21 @@ const NewProjectModal: FC<NewProjectModalProps> = () => {
                 </div>
             </div>
 
-            <p className={styles.errorMessage}>{project.error?.message ?? ""}</p>
+            <p className={styles.errorMessage}>{project.message}</p>
 
             <Btn
                 className={styles.createBtn}
-                onClick={(e) => {
+                onClick={async (e) => {
                     e.preventDefault();
+                    const resp = await addProject(
+                        dispatch,
+                        await api().newProject(project.name, project.path),
+                        () => projectsLen < PROJECTS_DEFAULT_LIMIT
+                    );
+                    setProject({ ...project, message: resp.message });
+                    if (resp.ok) {
+                        close();
+                    }
                 }}
             >
                 Create

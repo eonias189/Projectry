@@ -1,6 +1,7 @@
 import { JsonHandler } from "./jsonHandlerModel";
 
 export type Project = {
+    id: string;
     name: string;
     path: string;
     lastEditingDate: number;

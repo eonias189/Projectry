@@ -1,32 +1,21 @@
 import { FC } from "react";
 import { Project } from "../types";
 import styles from "./projectCard.module.css";
-import Btn from "./UI/btn";
 import IconBtn from "./UI/iconBtn";
 import DropDown from "./dropDown";
 import { cancelIcon, deleteIcon, editIcon, okIcon, openIcon, settingsIcon } from "./UI/icons";
 import useEditAble from "../hooks/useEditable";
+import { getDate } from "../utils";
+import { deleteProject, editProject } from "../manageState/projects";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 
 interface ProjectCardProps {
     project: Project;
 }
 
-const getDate = (date: Date): string => {
-    const now = new Date();
-    const dayDelta = (now.getTime() - date.getTime()) / 1000 / 3600 / 24;
-    if (dayDelta >= 365) {
-        return `${Math.ceil(dayDelta / 365)} years ago`;
-    } else if (dayDelta >= 30) {
-        return `${Math.ceil(dayDelta / 30.5)} months ago`;
-    } else if (now.getDate() !== date.getDate()) {
-        return `${Math.ceil(dayDelta)} days ago`;
-    } else {
-        return "today";
-    }
-};
-
 const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
     const lastEditingDate = new Date(project.lastEditingDate);
+    const dispatch = useAppDispatch();
     const [{ name }, editaAbleName, isAditing, startEdit, finishEdit, cancelEdit] = useEditAble({
         name: project.name,
     });
@@ -40,11 +29,23 @@ const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
             {editIcon}
         </IconBtn>
     );
-    const deleteBtn = <IconBtn>{deleteIcon}</IconBtn>;
+    const deleteBtn = (
+        <IconBtn
+            onClick={async () => {
+                if (window.confirm(`Delete ${project.name}?`)) {
+                    await deleteProject(dispatch, project.id);
+                }
+            }}
+        >
+            {deleteIcon}
+        </IconBtn>
+    );
     const okBtn = (
         <IconBtn
-            onClick={() => {
-                finishEdit();
+            onClick={(e) => {
+                e.preventDefault();
+                const { name: newName } = finishEdit();
+                editProject(dispatch, project.id, newName);
             }}
         >
             {okIcon}

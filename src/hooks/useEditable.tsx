@@ -9,7 +9,7 @@ const useEditAble = <T extends Record<string, string>>(
     element: ReactNode,
     isAditind: boolean,
     startEdit: () => void,
-    finishEdit: () => void,
+    finishEdit: () => T,
     calcelEdit: () => void
 ] => {
     const [isAditing, setIsAditing] = useState(false);
@@ -20,6 +20,7 @@ const useEditAble = <T extends Record<string, string>>(
     const finishEdit = () => {
         setLastValues(values);
         setIsAditing(false);
+        return values;
     };
     const cancelEditing = () => {
         setValues(lastValues);
