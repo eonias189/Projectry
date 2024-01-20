@@ -19,3 +19,6 @@ export const getDate = (date: Date): string => {
         return "today";
     }
 };
+
+export type Unpormise<T> = T extends Promise<infer R> ? Unpormise<R> : T;
+export type UnArray<T> = T extends Array<infer R> ? UnArray<R> : T;

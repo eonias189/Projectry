@@ -1,3 +1,4 @@
+import { join } from "path";
 import { JsonHandler } from "./jsonHandlerModel";
 
 export type Project = {
@@ -11,8 +12,9 @@ export type AllProjectsJson = Array<Project>;
 
 const defaulData: AllProjectsJson = [];
 
+const filename = "all-projects.json";
 export class RecentProjectHandler extends JsonHandler<AllProjectsJson> {
     constructor(dataDir: string) {
-        super(dataDir, "all-projects.json", defaulData);
+        super(join(dataDir, filename), defaulData);
     }
 }

@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain, IpcMainInvokeEvent } from "electron";
 import installExtension, { REACT_DEVELOPER_TOOLS } from "electron-devtools-installer";
 import { ConfigInterface } from "../config";
-import { apiHandlers } from "../api";
+import { allHandlers } from "../api";
 import { MainWindow } from "./mainWindow";
 
 function logFunc(func: (...args: any[]) => any): (...args: any[]) => any {
@@ -24,7 +24,7 @@ export class Application {
     }
 
     private handleAllApi() {
-        for (let handler of Object.values(apiHandlers)) {
+        for (let handler of Object.values(allHandlers)) {
             ipcMain.handle(handler.name, handler);
         }
     }

@@ -1,6 +1,6 @@
 import { mkdir, writeFile, readFile } from "node:fs/promises";
-import { existsSync } from "node:fs";
-import { join } from "node:path";
+import { existsSync, writeFileSync, mkdirSync } from "node:fs";
+import { dirname } from "node:path";
 
 export interface ConnectionInterface<JsonModel extends Object> {
     data: JsonModel;
@@ -29,16 +29,12 @@ export class Connection<JsonModel extends Object> implements ConnectionInterface
 }
 
 export class JsonHandler<JsonModel extends Object> implements JsonHandlerInterface<JsonModel> {
-    public fileName: string;
-    private dataDir: string;
     private defaultData: JsonModel;
     private fullPath: string;
     private connection?: ConnectionInterface<JsonModel>;
 
-    constructor(dataDir: string, fileName: string, defaultData: JsonModel) {
-        this.dataDir = dataDir;
-        this.fileName = fileName;
-        this.fullPath = join(this.dataDir, this.fileName);
+    constructor(fullpath: string, defaultData: JsonModel) {
+        this.fullPath = fullpath;
         this.defaultData = defaultData;
         this.checkFileExists();
     }
@@ -50,12 +46,13 @@ export class JsonHandler<JsonModel extends Object> implements JsonHandlerInterfa
         return this.connection;
     }
 
-    private async checkFileExists() {
-        if (!existsSync(this.dataDir)) {
-            await mkdir(this.dataDir);
+    private checkFileExists() {
+        const parentDir = dirname(this.fullPath);
+        if (!existsSync(parentDir)) {
+            mkdirSync(parentDir);
         }
         if (!existsSync(this.fullPath)) {
-            await this.setData(this.defaultData);
+            writeFileSync(this.fullPath, JSON.stringify(this.defaultData, null, 2));
         }
     }
 

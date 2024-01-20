@@ -1,11 +1,11 @@
 import { AppDispatch } from "../store/store";
-import { projectActions } from "../store/reducers/projectReducer";
+import { AllProjectsActions } from "../store/reducers/allProjectsReducer";
 import { ApiType, Project } from "../types";
 import { PROJECTS_DEFAULT_LIMIT } from "../assets";
 
 export const fetchProjects = async (dispatch: AppDispatch, limit?: number) => {
     const projects = await api().getProjects(limit);
-    const action = projectActions.insertProjects({ projects });
+    const action = AllProjectsActions.insertProjects({ projects });
     dispatch(action);
 };
 
@@ -26,7 +26,7 @@ export const addProject = async (
         return { message: "unknown error", ok: false };
     }
     if (typeof addToStorage == "boolean" || addToStorage()) {
-        const action = projectActions.addProject({ project });
+        const action = AllProjectsActions.addProject({ project });
         dispatch(action);
     }
     return { message: "", ok: true };
@@ -38,12 +38,12 @@ export const deleteProject = async (dispatch: AppDispatch, id: string): Promise<
     } catch (err) {
         return;
     }
-    const action = projectActions.deleteProject({ id });
+    const action = AllProjectsActions.deleteProject({ id });
     dispatch(action);
 };
 
 export const editProject = async (dispatch: AppDispatch, id: string, newName: string): Promise<void> => {
     await api().editProjectName(id, newName);
-    const action = projectActions.editProject({ id, newName });
+    const action = AllProjectsActions.editProject({ id, newName });
     dispatch(action);
 };

@@ -5,7 +5,7 @@ import Btn from "../components/UI/btn";
 import ProjectCard from "../components/projectCard";
 import { useModalWindow } from "../hooks/useModalWindow";
 import NewProjectModal from "../components/newProjectModal";
-import { fetchProjects } from "../manageState/projects";
+import { fetchProjects } from "../manageState/allProjects";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import useLoader from "../hooks/useLoader";
 import { PROJECTS_DEFAULT_LIMIT } from "../assets";
@@ -13,7 +13,7 @@ interface MainPageProps {}
 
 const MainPage: FC<MainPageProps> = ({}) => {
     const dispatch = useAppDispatch();
-    const projects = useAppSelector((store) => store.projects);
+    const projects = useAppSelector((store) => store.allProjects);
     const [projectsAreLoading, projectLoader] = useLoader();
 
     useEffect(() => {

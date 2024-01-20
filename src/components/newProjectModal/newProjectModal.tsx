@@ -3,7 +3,7 @@ import styles from "./newProjectModal.module.css";
 import InputField from "../UI/inputField";
 import Btn from "../UI/btn";
 import { openIcon } from "../UI/icons";
-import { addProject } from "../../manageState/projects";
+import { addProject } from "../../manageState/allProjects";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { PROJECTS_DEFAULT_LIMIT } from "../../assets";
 
@@ -13,7 +13,7 @@ interface NewProjectModalProps {
 
 const NewProjectModal: FC<NewProjectModalProps> = ({ close }) => {
     const dispatch = useAppDispatch();
-    const projectsLen = useAppSelector((store) => store.projects.length);
+    const projectsLen = useAppSelector((store) => store.allProjects.length);
     const [project, setProject] = useState<{ name: string; path: string; message: string }>({
         name: "",
         path: "",

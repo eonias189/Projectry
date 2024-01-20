@@ -22,7 +22,7 @@ const Router: FC<RouterProps> = ({}) => {
         <HashRouter>
             <Routes>
                 <Route path="/" element={<MainPage />} />
-                <Route path="/dev/:project_name" element={<DevPage />} />
+                <Route path="/dev/:projectID" element={<DevPage />} />
                 <Route path="/dev/" element={<RedirectToMainPage />} />
             </Routes>
         </HashRouter>

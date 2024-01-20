@@ -6,8 +6,9 @@ import DropDown from "../dropDown";
 import { cancelIcon, deleteIcon, editIcon, okIcon, openIcon, settingsIcon } from "../UI/icons";
 import useEditAble from "../../hooks/useEditable";
 import { getDate } from "../../utils";
-import { deleteProject, editProject } from "../../manageState/projects";
+import { deleteProject, editProject } from "../../manageState/allProjects";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { useNavigate } from "react-router-dom";
 
 interface ProjectCardProps {
     project: Project;
@@ -16,10 +17,19 @@ interface ProjectCardProps {
 const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
     const lastEditingDate = new Date(project.lastEditingDate);
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const [{ name }, editaAbleName, isAditing, startEdit, finishEdit, cancelEdit] = useEditAble({
         name: project.name,
     });
-    const openBtn = <IconBtn>{openIcon}</IconBtn>;
+    const openBtn = (
+        <IconBtn
+            onClick={() => {
+                navigate(`/dev/${project.id}`);
+            }}
+        >
+            {openIcon}
+        </IconBtn>
+    );
     const editBtn = (
         <IconBtn
             onClick={() => {
