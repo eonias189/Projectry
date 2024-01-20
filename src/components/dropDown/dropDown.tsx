@@ -1,6 +1,6 @@
 import { FC, ReactElement, ReactNode, useState } from "react";
 import styles from "./dropDown.module.css";
-import { expandedIcon, collapsedIcon } from "./UI/icons";
+import { expandedIcon, collapsedIcon } from "..//UI/icons";
 
 interface DropDownProps {
     children?: ReactNode;

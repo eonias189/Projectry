@@ -1,13 +1,13 @@
 import { FC } from "react";
-import { Project } from "../types";
+import { Project } from "../../types";
 import styles from "./projectCard.module.css";
-import IconBtn from "./UI/iconBtn";
-import DropDown from "./dropDown";
-import { cancelIcon, deleteIcon, editIcon, okIcon, openIcon, settingsIcon } from "./UI/icons";
-import useEditAble from "../hooks/useEditable";
-import { getDate } from "../utils";
-import { deleteProject, editProject } from "../manageState/projects";
-import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
+import IconBtn from "../UI/iconBtn";
+import DropDown from "../dropDown";
+import { cancelIcon, deleteIcon, editIcon, okIcon, openIcon, settingsIcon } from "../UI/icons";
+import useEditAble from "../../hooks/useEditable";
+import { getDate } from "../../utils";
+import { deleteProject, editProject } from "../../manageState/projects";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 
 interface ProjectCardProps {
     project: Project;

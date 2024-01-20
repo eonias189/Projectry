@@ -1,11 +1,11 @@
-import { FC, useState } from "react";
+import { FC, useState, MouseEvent } from "react";
 import styles from "./newProjectModal.module.css";
-import InputField from "./UI/inputField";
-import Btn from "./UI/btn";
-import { openIcon } from "./UI/icons";
-import { addProject } from "../manageState/projects";
-import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
-import { PROJECTS_DEFAULT_LIMIT } from "../assets";
+import InputField from "../UI/inputField";
+import Btn from "../UI/btn";
+import { openIcon } from "../UI/icons";
+import { addProject } from "../../manageState/projects";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { PROJECTS_DEFAULT_LIMIT } from "../../assets";
 
 interface NewProjectModalProps {
     close(): void;
@@ -19,6 +19,27 @@ const NewProjectModal: FC<NewProjectModalProps> = ({ close }) => {
         path: "",
         message: "",
     });
+
+    const handleChooseFolder = (e: MouseEvent<HTMLSpanElement>) => {
+        e.preventDefault();
+        api()
+            .chooseFolder()
+            .then((path) => setProject({ ...project, path }));
+    };
+
+    const handleCreateProject = async (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
+        e.preventDefault();
+        const resp = await addProject(
+            dispatch,
+            await api().newProject(project.name, project.path),
+            () => projectsLen < PROJECTS_DEFAULT_LIMIT
+        );
+        setProject({ ...project, message: resp.message });
+        if (resp.ok) {
+            close();
+        }
+    };
+
     return (
         <form className={styles.formContainer}>
             <p className={styles.info}>Create project</p>
@@ -36,15 +57,7 @@ const NewProjectModal: FC<NewProjectModalProps> = ({ close }) => {
                         value={project.path}
                         onChange={(e) => setProject({ ...project, path: e.currentTarget.value })}
                     />
-                    <span
-                        className={styles.chooseFolderBtn}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            api()
-                                .chooseFolder()
-                                .then((path) => setProject({ ...project, path }));
-                        }}
-                    >
+                    <span className={styles.chooseFolderBtn} onClick={handleChooseFolder}>
                         {openIcon}
                     </span>
                 </div>
@@ -52,21 +65,7 @@ const NewProjectModal: FC<NewProjectModalProps> = ({ close }) => {
 
             <p className={styles.errorMessage}>{project.message}</p>
 
-            <Btn
-                className={styles.createBtn}
-                onClick={async (e) => {
-                    e.preventDefault();
-                    const resp = await addProject(
-                        dispatch,
-                        await api().newProject(project.name, project.path),
-                        () => projectsLen < PROJECTS_DEFAULT_LIMIT
-                    );
-                    setProject({ ...project, message: resp.message });
-                    if (resp.ok) {
-                        close();
-                    }
-                }}
-            >
+            <Btn className={styles.createBtn} onClick={handleCreateProject}>
                 Create
             </Btn>
         </form>

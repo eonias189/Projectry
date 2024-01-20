@@ -2,8 +2,8 @@ import { FC, ReactNode, useEffect, useState } from "react";
 import styles from "./modalWindow.module.css";
 import { createPortal } from "react-dom";
 import Portal, { createContainer } from "./portal";
-import IconBtn from "./UI/iconBtn";
-import { cancelIcon } from "./UI/icons";
+import IconBtn from "../UI/iconBtn";
+import { cancelIcon } from "../UI/icons";
 
 interface ModalWindowProps {
     isShowing: boolean;
