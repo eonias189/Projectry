@@ -24,4 +24,4 @@ type IEdit<K extends keyof ProjectData> = {
     newElement: UnArray<ProjectData[K]>;
 };
 
-export type EditPayload = IEdit<"modules"> | IEdit<"objects"> | IEdit<"functions">;
+export type EditPayload = IEdit<"modules"> | IEdit<"objects"> | IEdit<"functions"> | IEdit<"interfaces">;
