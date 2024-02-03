@@ -5,7 +5,7 @@ import IconBtn from "../UI/iconBtn";
 import DropDown from "../dropDown";
 import { cancelIcon, deleteIcon, editIcon, okIcon, openIcon, settingsIcon } from "../UI/icons";
 import useEditAble from "../../hooks/useEditable";
-import { getDate } from "../../utils";
+import { getDate } from "../../utils/dateUtils";
 import { deleteProject, editProject } from "../../manageState/allProjects";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { useNavigate } from "react-router-dom";

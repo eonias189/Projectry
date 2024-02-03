@@ -1,37 +1,42 @@
-export type TModule = {
-    moduleID: string;
+export type TModule = ElementMixin & {
+    children: ModuleChildren;
+    depencies: ModuleChildren;
+};
+
+type ModuleChildren = {
+    objects: string[];
+    functions: string[];
+    interfaces: string[];
+};
+
+export type ElementMixin = {
+    id: string;
     name: string;
-    objectsID: string[];
-    functionsID: string[];
-    depencies: Depency[];
+    description?: string;
     extraArgs?: ExtraArgs;
 };
 
-export type Depency = {
-    moduleID: string;
-    objectsID: string[];
-    functionsID: string[];
-};
-
-export type TObject = {
-    objectID: string;
-    name: string;
-    description?: string;
+export type TObject = ElementMixin & {
+    methods: FunctionSignature[];
     fields: TypedValue[];
-    methodsID: string[];
-    extraArgs?: ExtraArgs;
 };
 
-export type TFunction = {
-    functionID: string;
+export type TFunction = ElementMixin & {
+    signature: FunctionSignature;
+};
+
+export type FunctionSignature = {
     name: string;
-    description?: string;
     parameters: TypedValue[];
     returnType?: string;
-    extraArgs?: ExtraArgs;
 };
 
-type ExtraArgs = Record<string, string>;
+export type TInterface = ElementMixin & {
+    fields: TypedValue[];
+    methods: FunctionSignature[];
+};
+
+export type ExtraArgs = Record<string, string>;
 
 export type TypedValue = {
     name: string;

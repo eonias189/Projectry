@@ -1,11 +1,3 @@
-export const getEntries = <T>(obj: T): (Extract<keyof T, string> | T[Extract<keyof T, string>])[][] => {
-    let res = [];
-    for (let key in obj) {
-        res.push([key, obj[key]]);
-    }
-    return res;
-};
-
 export const getDate = (date: Date): string => {
     const now = new Date();
     const dayDelta = (now.getTime() - date.getTime()) / 1000 / 3600 / 24;
@@ -19,6 +11,3 @@ export const getDate = (date: Date): string => {
         return "today";
     }
 };
-
-export type Unpormise<T> = T extends Promise<infer R> ? Unpormise<R> : T;
-export type UnArray<T> = T extends Array<infer R> ? UnArray<R> : T;

@@ -1,6 +1,6 @@
 import { useState, ReactNode } from "react";
 import InputField from "../components/UI/inputField";
-import { getEntries } from "../utils";
+import { getEntries } from "../utils/objectUtils";
 
 const useEditAble = <T extends Record<string, string>>(
     defaultValues: T

@@ -1,5 +1,8 @@
-import { createSlice, PayloadAction, createReducer } from "@reduxjs/toolkit";
-import { ProjectData, TFunction, TModule, TObject } from "../../types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ProjectData } from "../../types";
+import { UnArray } from "../../utils/typeUtils";
+import { addUniqueElement, deleteUniqueElement, editUniqueElement } from "../../utils/reducerUtils";
+import { AddElementPayload, ChildrenPayload, EditPayload } from "../../types/projectDataPayloads";
 
 const projectDataSlice = createSlice({
     name: "projectData",
@@ -7,86 +10,40 @@ const projectDataSlice = createSlice({
         modules: [],
         objects: [],
         functions: [],
+        interfaces: [],
     } as ProjectData,
     reducers: {
-        insertProjectData(
-            state,
-            { payload: { projectData } }: PayloadAction<{ projectData: ProjectData }>
-        ) {
-            return projectData;
+        insertProjectData(state, { payload }: PayloadAction<ProjectData>) {
+            return payload;
         },
-        addModule(state, { payload: { module } }: PayloadAction<{ module: TModule }>) {
-            return { ...state, modules: [...state.modules, module] };
+        addElement(state, { payload }: PayloadAction<AddElementPayload>) {
+            return { ...state, [payload.key]: addUniqueElement(state[payload.key], payload.element) };
         },
-        addObject(
-            state,
-            { payload: { object, moduleID } }: PayloadAction<{ object: TObject; moduleID: string }>
-        ) {
-            const module = state.modules.find((mod) => mod.moduleID === moduleID);
-            if (module) {
-                module.objectsID.push(object.objectID);
-                state.objects.push(object);
+        deleteElement(state, { payload }: PayloadAction<{ key: keyof ProjectData; id: string }>) {
+            const arr = state[payload.key];
+            return { ...state, [payload.key]: deleteUniqueElement<UnArray<typeof arr>>(arr, payload.id) };
+        },
+        addToChildren(state, { payload }: PayloadAction<ChildrenPayload>) {
+            const module = state.modules.find((i) => i.id === payload.id);
+            if (!module) {
+                return;
             }
-        },
-        addFunction(
-            state,
-            { payload: { func, moduleID } }: PayloadAction<{ func: TFunction; moduleID: string }>
-        ) {
-            const module = state.modules.find((mod) => mod.moduleID === moduleID);
-            if (module) {
-                module.functionsID.push(func.functionID);
-                state.functions.push(func);
+            const children = module.children[payload.childType];
+            if (children.includes(payload.child)) {
+                return;
             }
+            children.push(payload.child);
         },
-        addMethod(
-            state,
-            { payload: { method, objectID } }: PayloadAction<{ method: TFunction; objectID: string }>
-        ) {
-            const object = state.objects.find((obj) => obj.objectID === objectID);
-            if (object) {
-                object.methodsID.push(method.functionID);
-                state.functions.push(method);
+        deleteFromChildren(state, { payload }: PayloadAction<ChildrenPayload>) {
+            const module = state.modules.find((i) => i.id === payload.id);
+            if (!module) {
+                return;
             }
+            const children = module.children[payload.childType];
+            module.children[payload.childType] = children.filter((i) => i !== payload.child);
         },
-        deleteModule(state, { payload: { moduleID } }: PayloadAction<{ moduleID: string }>) {
-            const newModules = state.modules.filter((module) => module.moduleID !== moduleID);
-            return { ...state, modules: newModules };
-        },
-        deleteObject(state, { payload: { objectID } }: PayloadAction<{ objectID: string }>) {
-            const module = state.modules.find((mod) => mod.objectsID.includes(objectID));
-            if (module) {
-                state.objects = state.objects.filter((object) => object.objectID !== objectID);
-                module.objectsID = module.objectsID.filter((objID) => objID !== objectID);
-            }
-        },
-        deleteFunction(state, { payload: { functionID } }: PayloadAction<{ functionID: string }>) {
-            const module = state.modules.find((mod) => mod.functionsID.includes(functionID));
-            if (module) {
-                module.functionsID = module.functionsID.filter((funcID) => funcID !== functionID);
-                state.functions = state.functions.filter((func) => func.functionID !== functionID);
-            }
-        },
-        deleteMethod(state, { payload: { methodID } }: PayloadAction<{ methodID: string }>) {
-            const object = state.objects.find((obj) => obj.methodsID.includes(methodID));
-            if (object) {
-                object.methodsID = object.methodsID.filter((metID) => metID !== methodID);
-                state.functions = state.functions.filter((func) => func.functionID !== methodID);
-            }
-        },
-        replaceObject(
-            state,
-            {
-                payload: { objectID, lastModuleID, newModuleID },
-            }: PayloadAction<{ objectID: string; lastModuleID: string; newModuleID: string }>
-        ) {
-            const lastModule = state.modules.find((module) => module.moduleID === lastModuleID);
-            if (lastModule) {
-                lastModule.objectsID = lastModule.objectsID.filter((objID) => objID !== objID);
-            }
-            const newModule = state.modules.find((module) => module.moduleID === newModuleID);
-            if (newModule) {
-                newModule.objectsID.push(objectID);
-            }
+        editElement(state, { payload }: PayloadAction<EditPayload>) {
+            editUniqueElement(state[payload.key], payload.id, payload.newElement);
         },
     },
 });
